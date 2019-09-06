@@ -35,7 +35,7 @@ let historyLog = []
 
 function plusResources(type, value) {
   resources[type] += value
-  historyLog.push({ type: "resources", action: "plus", resource: type, value: value })
+  historyLog.push({ type: "resources", action: "plus", resource: type, value: value, gen: generation })
   $(".resources." + type).html(resources[type])
   populateHistory()
 
@@ -44,7 +44,7 @@ function plusResources(type, value) {
 
 function plusProduction(type, value) {
   production[type] += value
-  historyLog.push({ type: "production", action: "plus", resource: type, value: value })
+  historyLog.push({ type: "production", action: "plus", resource: type, value: value, gen: generation })
   $(".production." + type).html(production[type])
 
   populateHistory()
@@ -54,7 +54,7 @@ function plusProduction(type, value) {
 function minusResources(type, value) {
   if (resources[type] > 0) {
     resources[type] -= value
-    historyLog.push({ type: "resources", action: "minus", resource: type, value: value })
+    historyLog.push({ type: "resources", action: "minus", resource: type, value: value, gen: generation })
     $(".resources." + type).html(resources[type])
 
     populateHistory()
@@ -70,14 +70,14 @@ function minusProduction(type, value) {
   if (production[type] > 0) {
 
     production[type] -= value
-    historyLog.push({ type: "production", action: "minus", resource: type, value: -value })
+    historyLog.push({ type: "production", action: "minus", resource: type, value: -value, gen: generation })
     $(".production." + type).html(production[type])
 
     populateHistory()
   }
   else if (production[type] <= 0 && type == "gold" && production[type] > -5) {
     production[type]--
-    historyLog.push({ type: "production", action: "minus", resource: type, value: -value })
+    historyLog.push({ type: "production", action: "minus", resource: type, value: -value, gen: generation })
     $(".production." + type).html(production[type])
   }
   else {
@@ -94,7 +94,7 @@ function populateHistory() {
     }
     else {
       let str = ""
-      str = str + "G" + generation + " : " + historyLog[i]["resource"] + " " + historyLog[i]["type"] + " " + historyLog[i]["action"] + " " + historyLog[i]["value"]
+      str = str + "G" + historyLog[i]["gen"] + " : " + historyLog[i]["resource"] + " " + historyLog[i]["type"] + " " + historyLog[i]["action"] + " " + historyLog[i]["value"]
       $("#history").append("<div class='logrow'>" + str + "</div>")
     }
 
@@ -114,4 +114,9 @@ function nextGen() {
   plusResources("heat", production["heat"])
   historyLog.push({ type: "generation", value: generation })
   populateHistory()
+}
+
+function changeTR(tr){
+  tr = parseInt(tr)
+  terraRating = tr
 }
