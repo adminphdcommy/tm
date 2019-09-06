@@ -1,0 +1,45 @@
+html, body {
+    touch-action: manipulation;
+}
+
+.resources {
+    text-align: center;
+    font-size: 500%;
+    font-weight: bold;
+}
+
+.production {
+    text-align: center;
+    font-size: 200%;
+    font-weight: bold;
+}
+
+.bg-gold {
+    background-color: #FFC300
+}
+
+.bg-steel {
+    background-color: #985E2E
+}
+
+.bg-titanium {
+    background-color: #3E3E3E
+}
+
+.bg-energy {
+    background-color: #A82CB2
+}
+
+.bg-heat {
+    background-color: #E61818
+}
+
+#generation{
+    display: inline-block;
+    width:50px;
+    font-size: 120%;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+

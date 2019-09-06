@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Metadata -->
+	<meta charset="utf-8">
+	<title>Terraforming Mars Calculator</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Cache-control" content="no-store">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+	<nav class="navbar navbar-light bg-light">
+		<form class="form-inline">
+			<div class="input-group">
+				Generation
+				<span id="generation">1</span>
+			</div>
+			<button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="nextGen()">Next</button>
+		</form>
+		<form>
+			<div class="input-group">
+				<div class="input-group-prepend">
+				  <span class="input-group-text" id="basic-addon1">TR</span>
+				</div>
+				<input type="text" class="form-control" placeholder="TR" aria-label="Username" aria-describedby="basic-addon1" style="width:100px" value="20">
+			  </div>
+		</form>
+	</nav>
+	<div class="p-3">
+		<div class="row">
+			<div class="col-9">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card my-1">
+							<div class="card-body text-center p-3 bg-gold ">
+								<div class="row ">
+									<div class="col p-0 ">
+										<button class="btn btn-light my-5" onclick="minusResources('gold',1)">-</button>
+									</div>
+									<div class="col-6  p-0">
+										<span class="resources gold">0</span>
+									</div>
+									<div class="col  p-0">
+										<button class="btn btn-light my-5" onclick="plusResources('gold',1)">+</button>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer text-center p-3">
+								<div class="row">
+									<div class="col  p-0">
+										<button class="btn btn-light my-2" onclick="minusProduction('gold',1)">-</button>
+									</div>
+									<div class="col-6 p-0">
+										<span class="production gold">0</span>
+									</div>
+									<div class="col p-0">
+										<button class="btn btn-light my-2" onclick="plusProduction('gold',1)">+</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card my-1">
+							<div class="card-body text-center p-3 bg-steel">
+								<div class="row ">
+									<div class="col p-0 ">
+										<button class="btn btn-light my-5" onclick="minusResources('steel',1)">-</button>
+									</div>
+									<div class="col-6  p-0">
+										<span class="resources steel">0</span>
+									</div>
+									<div class="col  p-0">
+										<button class="btn btn-light my-5" onclick="plusResources('steel',1)">+</button>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer text-center p-3">
+								<div class="row">
+									<div class="col  p-0">
+										<button class="btn btn-light my-2" onclick="minusProduction('steel',1)">-</button>
+									</div>
+									<div class="col-6 p-0">
+										<span class="production steel">0</span>
+									</div>
+									<div class="col p-0">
+										<button class="btn btn-light my-2" onclick="plusProduction('steel',1)">+</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card my-1">
+							<div class="card-body text-center p-3 bg-titanium">
+								<div class="row ">
+									<div class="col p-0 ">
+										<button class="btn btn-light my-5"
+											onclick="minusResources('titanium',1)">-</button>
+									</div>
+									<div class="col-6  p-0">
+										<span class="resources titanium">0</span>
+									</div>
+									<div class="col  p-0">
+										<button class="btn btn-light my-5"
+											onclick="plusResources('titanium',1)">+</button>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer text-center p-3">
+								<div class="row">
+									<div class="col  p-0">
+										<button class="btn btn-light my-2"
+											onclick="minusProduction('titanium',1)">-</button>
+									</div>
+									<div class="col-6 p-0">
+										<span class="production titanium">0</span>
+									</div>
+									<div class="col p-0">
+										<button class="btn btn-light my-2"
+											onclick="plusProduction('titanium',1)">+</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card my-1">
+							<div class="card-body text-center p-3 bg-success">
+								<div class="row ">
+									<div class="col p-0 ">
+										<button class="btn btn-light my-5" onclick="minusResources('plant',1)">-</button>
+									</div>
+									<div class="col-6  p-0">
+										<span class="resources plant">0</span>
+									</div>
+									<div class="col  p-0">
+										<button class="btn btn-light my-5" onclick="plusResources('plant',1)">+</button>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer text-center p-3">
+								<div class="row">
+									<div class="col  p-0">
+										<button class="btn btn-light my-2" onclick="minusProduction('plant',1)">-</button>
+									</div>
+									<div class="col-6 p-0">
+										<span class="production plant">0</span>
+									</div>
+									<div class="col p-0">
+										<button class="btn btn-light my-2" onclick="plusProduction('plant',1)">+</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card my-1">
+							<div class="card-body text-center p-3 bg-energy">
+								<div class="row ">
+									<div class="col p-0 ">
+										<button class="btn btn-light my-5" onclick="minusResources('energy',1)">-</button>
+									</div>
+									<div class="col-6  p-0">
+										<span class="resources energy">0</span>
+									</div>
+									<div class="col  p-0">
+										<button class="btn btn-light my-5" onclick="plusResources('energy',1)">+</button>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer text-center p-3">
+								<div class="row">
+									<div class="col  p-0">
+										<button class="btn btn-light my-2"
+											onclick="minusProduction('energy',1)">-</button>
+									</div>
+									<div class="col-6 p-0">
+										<span class="production energy">0</span>
+									</div>
+									<div class="col p-0">
+										<button class="btn btn-light my-2" onclick="plusProduction('energy',1)">+</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card my-1">
+							<div class="card-body text-center p-3 bg-heat">
+								<div class="row ">
+									<div class="col p-0 ">
+										<button class="btn btn-light my-5" onclick="minusResources('heat')">-</button>
+									</div>
+									<div class="col-6  p-0">
+										<span class="resources heat">0</span>
+									</div>
+									<div class="col  p-0">
+										<button class="btn btn-light my-5" onclick="plusResources('heat')">+</button>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer text-center p-3">
+								<div class="row">
+									<div class="col  p-0">
+										<button class="btn btn-light my-2" onclick="minusProduction('heat')">-</button>
+									</div>
+									<div class="col-6 p-0">
+										<span class="production heat">0</span>
+									</div>
+									<div class="col p-0">
+										<button class="btn btn-light my-2" onclick="plusProduction('heat')">+</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-3">
+				<div class="bg-info p-2" style="height:300px;width:100%;overflow-y: scroll">
+					<h5>History</h5>
+					<div id="history">
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+	<!-- Jquery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<!-- Custom JS -->
+	<script src="js/script.js"></script>
+</body>
+
+</html>
