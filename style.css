@@ -18,28 +18,100 @@ html, body {
     background-color: #FFC300
 }
 
+.border-gold {
+    border: 1px solid #FFC300
+}
+
+.text-gold {
+    color: #FFC300
+}
+
 .bg-steel {
     background-color: #985E2E
+}
+
+.border-steel {
+    border: 1px solid #985E2E
+}
+
+.text-steel {
+    color: #985E2E
 }
 
 .bg-titanium {
     background-color: #3E3E3E
 }
 
+.border-titanium {
+    border: 1px solid #3E3E3E
+}
+
+.text-titanium {
+    color: #3E3E3E
+}
+
+.bg-plant {
+    background-color: rgb(28, 184, 28)
+}
+
+.border-plant {
+    border: 1px solid rgb(28, 184, 28)
+}
+
+.text-plant {
+    color: rgb(28, 184, 28)
+}
+
 .bg-energy {
     background-color: #A82CB2
+}
+
+.border-energy {
+    border: 1px solid #A82CB2
+}
+
+.text-energy {
+    color: #A82CB2
 }
 
 .bg-heat {
     background-color: #E61818
 }
 
-#generation{
+.border-heat {
+    border: 1px solid #E61818
+}
+
+.text-heat {
+    color: #E61818
+}
+
+#generation {
     display: inline-block;
-    width:50px;
+    width: 40px;
     font-size: 120%;
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
 }
 
+#historyWrapper {
+    height: 80vh;
+    width: 200px;
+    overflow-y: scroll;
+    position: absolute;
+    z-index: 1;
+    right: 20px;
+}
+
+.logrow:hover  {
+    background-color: rgb(202, 202, 202)
+}
+
+.plus {
+    color:rgb(49, 173, 0);
+}
+
+.minus {
+    color:rgb(197, 0, 0)
+}

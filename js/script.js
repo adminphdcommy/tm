@@ -9,114 +9,124 @@ let setting = {
   }
 }
 
-let generation = 0
-let terraRating = 20
-
-let resources = {
-  gold: 0,
-  steel: 0,
-  titanium: 0,
-  plant: 0,
-  energy: 0,
-  heat: 0
-}
-
-
-let production = {
-  gold: 0,
-  steel: 0,
-  titanium: 0,
-  plant: 0,
-  energy: 0,
-  heat: 0
+let game = {
+  resources: {
+    gold: 0,
+    steel: 0,
+    titanium: 0,
+    plant: 0,
+    energy: 0,
+    heat: 0
+  },
+  production: {
+    gold: 0,
+    steel: 0,
+    titanium: 0,
+    plant: 0,
+    energy: 0,
+    heat: 0
+  },
+  generation: 1,
+  terraRating: 20
 }
 
 let historyLog = []
 
-function plusResources(type, value) {
-  resources[type] += value
-  historyLog.push({ type: "resources", action: "plus", resource: type, value: value, gen: generation })
-  $(".resources." + type).html(resources[type])
+function plus(resourceType, value, section, genHistory) {
+  if (section == 'resources' || section == 'production') {
+    game[section][resourceType] += value
+    historyLog.push({ type: section, action: "plus", resource: resourceType, value: value, gen: game["generation"] })
+    $("." + section + "." + resourceType).html(game[section][resourceType])
+  }
+  else if (section == "terraRating") {
+    game[section] += value
+  }
+
+  if (!genHistory) {
+    populateHistory()
+  }
+
+}
+
+function minus(resourceType, value, section) {
+  if (section == 'resources') {
+    if (game[section][resourceType] > 0 || value ==0) {
+      game[section][resourceType] -= value
+      historyLog.push({ type: section, action: "minus", resource: resourceType, value: value, gen: game["generation"] })
+      $(".resources." + resourceType).html(game[section][resourceType])
+    }
+    else {
+      return alert("insufficient " + resourceType + " resources")
+    }
+  }
+  else if (section == 'production') {
+    if (game[section][resourceType] > 0) {
+      game[section][resourceType] -= value
+      historyLog.push({ type: "production", action: "minus", resource: resourceType, value: value, gen: game["generation"] })
+      $(".production." + resourceType).html(game[section][resourceType])
+
+    }
+    else if (game[section][resourceType] <= 0 && resourceType == "gold" && game[section][resourceType] > -5) {
+      game[section][resourceType]--
+      historyLog.push({ type: "production", action: "minus", resource: resourceType, value: value, gen: game["generation"] })
+      $(".production." + resourceType).html(game[section][resourceType])
+    }
+    else {
+      return alert("insufficient " + resourceType + " production")
+
+    }
+  }
+
   populateHistory()
 
 
 }
 
-function plusProduction(type, value) {
-  production[type] += value
-  historyLog.push({ type: "production", action: "plus", resource: type, value: value, gen: generation })
-  $(".production." + type).html(production[type])
 
-  populateHistory()
-
-}
-
-function minusResources(type, value) {
-  if (resources[type] > 0) {
-    resources[type] -= value
-    historyLog.push({ type: "resources", action: "minus", resource: type, value: value, gen: generation })
-    $(".resources." + type).html(resources[type])
-
-    populateHistory()
-  }
-  else {
-    alert("insufficient " + type + " resources")
-
-  }
-
-}
-
-function minusProduction(type, value) {
-  if (production[type] > 0) {
-
-    production[type] -= value
-    historyLog.push({ type: "production", action: "minus", resource: type, value: -value, gen: generation })
-    $(".production." + type).html(production[type])
-
-    populateHistory()
-  }
-  else if (production[type] <= 0 && type == "gold" && production[type] > -5) {
-    production[type]--
-    historyLog.push({ type: "production", action: "minus", resource: type, value: -value, gen: generation })
-    $(".production." + type).html(production[type])
-  }
-  else {
-    alert("insufficient " + type + " production")
-
-  }
-}
 
 function populateHistory() {
   $("#history").html("")
   for (var i = historyLog.length - 1; i >= 0; i--) {
     if (historyLog[i]["type"] == "generation") {
-      $("#history").append("<div class='logrow'>--New Gen : " + historyLog[i]["value"] + "--</div>")
+      $("#history").append("<div class='col'><h5 class='text-center my-3'>Generation " + historyLog[i]["value"] + "</h5></div>")
     }
     else {
-      let str = ""
-      str = str + "G" + historyLog[i]["gen"] + " : " + historyLog[i]["resource"] + " " + historyLog[i]["type"] + " " + historyLog[i]["action"] + " " + historyLog[i]["value"]
-      $("#history").append("<div class='logrow'>" + str + "</div>")
+      let _class
+      if (historyLog[i]["type"] == "production") {
+        _class = "text-"
+      }
+      else if (historyLog[i]["type"] == "resources") {
+        _class = "bg-"
+      }
+
+
+      let str = "<div class='row logrow'><div class='col-10'>" + " <span class='" + _class + historyLog[i]["resource"]+"'>" + historyLog[i]["resource"] + "</span></div><div class='col-2 " + historyLog[i]["action"] + "'>" + historyLog[i]["value"] + "</div></div>"
+      // str = str + historyLog[i]["resource"] + " " + historyLog[i]["type"] + " " + historyLog[i]["action"] + " " + historyLog[i]["value"]
+      $("#history").append(str)
     }
 
   }
 }
 
 function nextGen() {
-  generation++
-  $("#generation").html(generation)
-  let goldResource = terraRating + production["gold"]
-  console.log(goldResource)
-  plusResources("gold", goldResource)
-  plusResources("steel", production["steel"])
-  plusResources("titanium", production["titanium"])
-  plusResources("plant", production["plant"])
-  plusResources("energy", production["energy"])
-  plusResources("heat", production["heat"])
-  historyLog.push({ type: "generation", value: generation })
+  game["generation"]++
+  $("#generation").val(game["generation"])
+
+  plus("heat", game["resources"]["energy"], "resources", false)
+  minus("energy", game["resources"]["energy"], "resources", false)
+
+  let goldResource = game["terraRating"] + game["production"]["gold"]
+  plus("gold", goldResource, "resources", false)
+  plus("steel", game["production"]["steel"], "resources", false)
+  plus("titanium", game["production"]["titanium"], "resources", false)
+  plus("plant", game["production"]["plant"], "resources", false)
+  plus("energy", game["production"]["energy"], "resources", false)
+  plus("heat", game["production"]["heat"], "resources", false)
+  historyLog.push({ type: "generation", value: game["generation"] - 1 })
   populateHistory()
 }
 
-function changeTR(tr){
+function changeTR(tr) {
   tr = parseInt(tr)
   terraRating = tr
 }

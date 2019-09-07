@@ -19,218 +19,256 @@
 <body>
 
 	<nav class="navbar navbar-light bg-light">
-		<form class="form-inline">
-			<div class="input-group">
-				Generation
-				<span id="generation">0</span>
-			</div>
-			<button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="nextGen()">Next</button>
-		</form>
 		<form>
 			<div class="input-group">
 				<div class="input-group-prepend">
-				  <span class="input-group-text" id="basic-addon1">TR</span>
+					<span class="input-group-text">Gen</span>
 				</div>
-				<input type="text" class="form-control" placeholder="TR" aria-label="Username" aria-describedby="basic-addon1" style="width:100px" value="20" id="terraRating" oninput="changeTR(this.value)">
-			  </div>
+				<input class="form-control px-2" type="text" id="generation" value=1 style="width: 45px;">
+				<div class="input-group-append">
+					<button class="btn btn-success" type="button" onclick="nextGen()">></button>
+				</div>
+			</div>
 		</form>
+
+		<!-- <form class="form-inline">
+			Generation
+			<span id="generation">1</span>
+			<button class="btn btn-outline-success" type="button" onclick="nextGen()">Next</button>
+		</form> -->
+		<form>
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text px-2" id="basic-addon1">TR</span>
+				</div>
+				<input type="text" class="form-control px-2" placeholder="TR" aria-label="Username"
+					aria-describedby="basic-addon1" style="width:35px" value="20" id="terraRating"
+					oninput="changeTR(this.value)">
+			</div>
+		</form>
+		<div class="dropdown">
+			<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#historyModal">
+				History
+			</button>
+		</div>
 	</nav>
 	<div class="p-3">
+
+
 		<div class="row">
-			<div class="col-9">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="card my-1">
-							<div class="card-body text-center p-3 bg-gold ">
-								<div class="row ">
-									<div class="col p-0 ">
-										<button class="btn btn-light my-5" onclick="minusResources('gold',1)">-</button>
-									</div>
-									<div class="col-6  p-0">
-										<span class="resources gold">0</span>
-									</div>
-									<div class="col  p-0">
-										<button class="btn btn-light my-5" onclick="plusResources('gold',1)">+</button>
-									</div>
+			<div class="col-md-4">
+				<div class="row m-2">
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="bg-gold">
+							<div class="row ">
+								<div class="col p-0 text-right">
+									<button class="btn btn-light my-5" onclick="minus('gold',1,'resources')">-</button>
 								</div>
-							</div>
-							<div class="card-footer text-center p-3">
-								<div class="row">
-									<div class="col  p-0">
-										<button class="btn btn-light my-2" onclick="minusProduction('gold',1)">-</button>
-									</div>
-									<div class="col-6 p-0">
-										<span class="production gold">0</span>
-									</div>
-									<div class="col p-0">
-										<button class="btn btn-light my-2" onclick="plusProduction('gold',1)">+</button>
-									</div>
+								<div class="col-6  p-0">
+									<span class="resources gold">0</span>
+								</div>
+								<div class="col text-left p-0">
+									<button class="btn btn-light my-5" onclick="plus('gold',1,'resources')">+</button>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
-						<div class="card my-1">
-							<div class="card-body text-center p-3 bg-steel">
-								<div class="row ">
-									<div class="col p-0 ">
-										<button class="btn btn-light my-5" onclick="minusResources('steel',1)">-</button>
-									</div>
-									<div class="col-6  p-0">
-										<span class="resources steel">0</span>
-									</div>
-									<div class="col  p-0">
-										<button class="btn btn-light my-5" onclick="plusResources('steel',1)">+</button>
-									</div>
+
+					<!-- <div class="w-100 d-none d-md-block"></div> -->
+
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="border-gold py-2">
+							<div class="row">
+								<div class="col text-right p-0">
+									<button class="btn btn-light my-2" onclick="minus('gold',1,'production')">-</button>
 								</div>
-							</div>
-							<div class="card-footer text-center p-3">
-								<div class="row">
-									<div class="col  p-0">
-										<button class="btn btn-light my-2" onclick="minusProduction('steel',1)">-</button>
-									</div>
-									<div class="col-6 p-0">
-										<span class="production steel">0</span>
-									</div>
-									<div class="col p-0">
-										<button class="btn btn-light my-2" onclick="plusProduction('steel',1)">+</button>
-									</div>
+								<div class="col-6 p-0">
+									<span class="production gold">0</span>
 								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card my-1">
-							<div class="card-body text-center p-3 bg-titanium">
-								<div class="row ">
-									<div class="col p-0 ">
-										<button class="btn btn-light my-5"
-											onclick="minusResources('titanium',1)">-</button>
-									</div>
-									<div class="col-6  p-0">
-										<span class="resources titanium">0</span>
-									</div>
-									<div class="col  p-0">
-										<button class="btn btn-light my-5"
-											onclick="plusResources('titanium',1)">+</button>
-									</div>
-								</div>
-							</div>
-							<div class="card-footer text-center p-3">
-								<div class="row">
-									<div class="col  p-0">
-										<button class="btn btn-light my-2"
-											onclick="minusProduction('titanium',1)">-</button>
-									</div>
-									<div class="col-6 p-0">
-										<span class="production titanium">0</span>
-									</div>
-									<div class="col p-0">
-										<button class="btn btn-light my-2"
-											onclick="plusProduction('titanium',1)">+</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card my-1">
-							<div class="card-body text-center p-3 bg-success">
-								<div class="row ">
-									<div class="col p-0 ">
-										<button class="btn btn-light my-5" onclick="minusResources('plant',1)">-</button>
-									</div>
-									<div class="col-6  p-0">
-										<span class="resources plant">0</span>
-									</div>
-									<div class="col  p-0">
-										<button class="btn btn-light my-5" onclick="plusResources('plant',1)">+</button>
-									</div>
-								</div>
-							</div>
-							<div class="card-footer text-center p-3">
-								<div class="row">
-									<div class="col  p-0">
-										<button class="btn btn-light my-2" onclick="minusProduction('plant',1)">-</button>
-									</div>
-									<div class="col-6 p-0">
-										<span class="production plant">0</span>
-									</div>
-									<div class="col p-0">
-										<button class="btn btn-light my-2" onclick="plusProduction('plant',1)">+</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card my-1">
-							<div class="card-body text-center p-3 bg-energy">
-								<div class="row ">
-									<div class="col p-0 ">
-										<button class="btn btn-light my-5" onclick="minusResources('energy',1)">-</button>
-									</div>
-									<div class="col-6  p-0">
-										<span class="resources energy">0</span>
-									</div>
-									<div class="col  p-0">
-										<button class="btn btn-light my-5" onclick="plusResources('energy',1)">+</button>
-									</div>
-								</div>
-							</div>
-							<div class="card-footer text-center p-3">
-								<div class="row">
-									<div class="col  p-0">
-										<button class="btn btn-light my-2"
-											onclick="minusProduction('energy',1)">-</button>
-									</div>
-									<div class="col-6 p-0">
-										<span class="production energy">0</span>
-									</div>
-									<div class="col p-0">
-										<button class="btn btn-light my-2" onclick="plusProduction('energy',1)">+</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card my-1">
-							<div class="card-body text-center p-3 bg-heat">
-								<div class="row ">
-									<div class="col p-0 ">
-										<button class="btn btn-light my-5" onclick="minusResources('heat',1)">-</button>
-									</div>
-									<div class="col-6  p-0">
-										<span class="resources heat">0</span>
-									</div>
-									<div class="col  p-0">
-										<button class="btn btn-light my-5" onclick="plusResources('heat',1)">+</button>
-									</div>
-								</div>
-							</div>
-							<div class="card-footer text-center p-3">
-								<div class="row">
-									<div class="col  p-0">
-										<button class="btn btn-light my-2" onclick="minusProduction('heat',1)">-</button>
-									</div>
-									<div class="col-6 p-0">
-										<span class="production heat">0</span>
-									</div>
-									<div class="col p-0">
-										<button class="btn btn-light my-2" onclick="plusProduction('heat',1)">+</button>
-									</div>
+								<div class="col p-0 text-left">
+									<button class="btn btn-light my-2" onclick="plus('gold',1,'production')">+</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col-3">
-				<div class="bg-info p-2" style="height:300px;width:100%;overflow-y: scroll">
-					<h5>History</h5>
-					<div id="history">
-
+			<div class="col-md-4">
+				<div class="row m-2">
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="bg-steel">
+							<div class="row ">
+								<div class="col p-0 text-right">
+									<button class="btn btn-light my-5" onclick="minus('steel',1,'resources')">-</button>
+								</div>
+								<div class="col-6  p-0">
+									<span class="resources steel">0</span>
+								</div>
+								<div class="col text-left p-0">
+									<button class="btn btn-light my-5" onclick="plus('steel',1,'resources')">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="border-steel py-2">
+							<div class="row">
+								<div class="col text-right p-0">
+									<button class="btn btn-light my-2"
+										onclick="minus('steel',1,'production')">-</button>
+								</div>
+								<div class="col-6 p-0">
+									<span class="production steel">0</span>
+								</div>
+								<div class="col p-0 text-left">
+									<button class="btn btn-light my-2" onclick="plus('steel',1,'production')">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row m-2">
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="bg-titanium">
+							<div class="row ">
+								<div class="col p-0 text-right">
+									<button class="btn btn-light my-5"
+										onclick="minus('titanium',1,'resources')">-</button>
+								</div>
+								<div class="col-6  p-0">
+									<span class="resources titanium">0</span>
+								</div>
+								<div class="col text-left p-0">
+									<button class="btn btn-light my-5"
+										onclick="plus('titanium',1,'resources')">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="border-titanium py-2">
+							<div class="row">
+								<div class="col text-right p-0">
+									<button class="btn btn-light my-2"
+										onclick="minus('titanium',1,'production')">-</button>
+								</div>
+								<div class="col-6 p-0">
+									<span class="production titanium">0</span>
+								</div>
+								<div class="col p-0 text-left">
+									<button class="btn btn-light my-2"
+										onclick="plus('titanium',1,'production')">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row m-2">
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="bg-plant">
+							<div class="row ">
+								<div class="col p-0 text-right">
+									<button class="btn btn-light my-5" onclick="minus('plant',1,'resources')">-</button>
+								</div>
+								<div class="col-6  p-0">
+									<span class="resources plant">0</span>
+								</div>
+								<div class="col text-left p-0">
+									<button class="btn btn-light my-5" onclick="plus('plant',1,'resources')">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="border-plant py-2">
+							<div class="row">
+								<div class="col text-right p-0">
+									<button class="btn btn-light my-2"
+										onclick="minus('plant',1,'production')">-</button>
+								</div>
+								<div class="col-6 p-0">
+									<span class="production plant">0</span>
+								</div>
+								<div class="col p-0 text-left">
+									<button class="btn btn-light my-2" onclick="plus('plant',1,'production')">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row m-2">
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="bg-energy">
+							<div class="row ">
+								<div class="col p-0 text-right">
+									<button class="btn btn-light my-5"
+										onclick="minus('energy',1,'resources')">-</button>
+								</div>
+								<div class="col-6  p-0">
+									<span class="resources energy">0</span>
+								</div>
+								<div class="col text-left p-0">
+									<button class="btn btn-light my-5" onclick="plus('energy',1,'resources')">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="border-energy py-2">
+							<div class="row">
+								<div class="col text-right p-0">
+									<button class="btn btn-light my-2"
+										onclick="minus('energy',1,'production')">-</button>
+								</div>
+								<div class="col-6 p-0">
+									<span class="production energy">0</span>
+								</div>
+								<div class="col p-0 text-left">
+									<button class="btn btn-light my-2"
+										onclick="plus('energy',1,'production')">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row m-2">
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="bg-heat">
+							<div class="row ">
+								<div class="col p-0 text-right">
+									<button class="btn btn-light my-5" onclick="minus('heat',1,'resources')">-</button>
+								</div>
+								<div class="col-6  p-0">
+									<span class="resources heat">0</span>
+								</div>
+								<div class="col text-left p-0">
+									<button class="btn btn-light my-5" onclick="plus('heat',1,'resources')">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-md-12 text-center px-0">
+						<div class="border-heat py-2">
+							<div class="row">
+								<div class="col text-right p-0">
+									<button class="btn btn-light my-2" onclick="minus('heat',1,'production')">-</button>
+								</div>
+								<div class="col-6 p-0">
+									<span class="production heat">0</span>
+								</div>
+								<div class="col p-0 text-left">
+									<button class="btn btn-light my-2" onclick="plus('heat',1,'production')">+</button>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -238,7 +276,34 @@
 
 
 
+
 	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Historical Log</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body overflow-auto px-3" style="max-height: 70vh;">
+					<div id="history">
+
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
 
 	<!-- Jquery -->
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
