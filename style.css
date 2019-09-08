@@ -162,6 +162,9 @@ html, body {
     margin: 5px;
 }
 
+.production-bar .input-group{
+    width:185px
+}
 /* #calculatorModal .submit {
     width: 135px;
     height: 60px;
@@ -173,12 +176,31 @@ html, body {
         font-size: 220%;
     }
     .production {
-        font-size: 200%;
+        font-size: 150%;
+        width:50px;
     }
     .controller button {
         display: none;
     }
     .displayNum {
         margin: 0;
+    }
+
+    .production-icon{
+        width:40px;
+        height:40px;
+        padding:4px;
+    }
+    .resource-icon{
+        width:32px;
+        height:32px;
+        padding: 3px 0;
+    }
+    .production-bar button{
+        padding-left:6px;
+        padding-right:6px;
+    }
+    .production-bar .input-group{
+        width:130px
     }
 }
