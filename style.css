@@ -171,7 +171,7 @@ html, body {
     margin: 5px
 } */
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 576px) {
     .resources {
         font-size: 220%;
     }
@@ -190,12 +190,23 @@ html, body {
         width:40px;
         height:40px;
         padding:4px;
+        margin: 5px 0;
     }
     .resource-icon{
         width:32px;
         height:32px;
         padding: 3px 0;
     }
+    .production-bar button{
+        padding-left:6px;
+        padding-right:6px;
+    }
+    .production-bar .input-group{
+        width:130px
+    }
+}
+
+@media only screen and (max-width: 768px) {
     .production-bar button{
         padding-left:6px;
         padding-right:6px;
