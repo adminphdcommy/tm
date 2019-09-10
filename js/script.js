@@ -57,7 +57,7 @@ function plus(resourceType, value, section, options) {
 function minus(resourceType, value, section, options) {
   let opts = Object.assign({}, options)
   if (section == 'resources') {
-    if (game[section][resourceType] > value || value == 0) {
+    if (game[section][resourceType] >= value || value == 0) {
       game[section][resourceType] -= value
       $(".resources." + resourceType).html(game[section][resourceType])
 
