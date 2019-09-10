@@ -57,7 +57,7 @@ function plus(resourceType, value, section, options) {
 function minus(resourceType, value, section, options) {
   let opts = Object.assign({}, options)
   if (section == 'resources') {
-    if (game[section][resourceType] > 0 || value == 0) {
+    if (game[section][resourceType] > value || value == 0) {
       game[section][resourceType] -= value
       $(".resources." + resourceType).html(game[section][resourceType])
 
@@ -123,14 +123,14 @@ function populateHistory() {
     else {
       let _class
       if (historyLog[i]["type"] == "production") {
-        _class = "text-"
+        _class = "text-" + historyLog[i]["resource"]
       }
       else if (historyLog[i]["type"] == "resources") {
-        _class = "bg-"
+        _class = "icon-" + historyLog[i]["resource"] + " bg-" + historyLog[i]["resource"]
       }
 
 
-      let str = "<div class='row logrow'><div class='col-10 my-1'>" + " <span class='desc-tag p-1 " + _class + historyLog[i]["resource"] + "'>" + historyLog[i]["resource"] + "</span></div><div class='col-2 " + historyLog[i]["action"] + "'>" + historyLog[i]["value"] + "</div></div>"
+      let str = "<div class='row logrow'><div class='col-10 my-1'>" + " <span class='desc-tag p-1 " + _class + "'>" + historyLog[i]["resource"] + "</span></div><div class='col-2 " + historyLog[i]["action"] + "'>" + historyLog[i]["value"] + "</div></div>"
       // str = str + historyLog[i]["resource"] + " " + historyLog[i]["type"] + " " + historyLog[i]["action"] + " " + historyLog[i]["value"]
       $("#history").append(str)
     }
@@ -248,14 +248,23 @@ $("#calculatorModal .submit").on("click", function (e) {
   let action = $(e.target).closest(".submit")[0].dataset.action
   let num = parseInt(setting.calculator.num)
   let resourceType = setting.calculator.resource
-  if(action == "plus"){
-    plus(resourceType,num,"resources")
+  if (action == "plus") {
+    plus(resourceType, num, "resources")
   }
-  else{
-    minus(resourceType,num,"resources")
+  else {
+    minus(resourceType, num, "resources")
   }
-  console.log(action,num, resourceType)
+  console.log(action, num, resourceType)
 
   $("#calculatorModal").modal("hide")
+  setting.calculator.num = ""
+  $(".displayNum").html("0")
 
+
+})
+
+$("#calculatorModal .clear").on("click", function (e) {
+  setting.calculator.num = ""
+  $(".displayNum").html("0")
+  console.log("clear", setting.calculator.num)
 })

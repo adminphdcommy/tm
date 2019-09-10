@@ -21,7 +21,7 @@ html, body {
 }
 
 .bg-gold {
-    background-color: rgb(245, 241, 31)
+    background-color: gold
 }
 
 .border-gold {
@@ -53,7 +53,11 @@ html, body {
 }
 
 .text-titanium {
-    color: rgb(255, 237, 71)
+    color: rgb(29, 27, 7)
+}
+
+.icon-titanium{
+    color: yellow
 }
 
 .bg-plant {
@@ -80,6 +84,10 @@ html, body {
     color: rgb(66, 17, 70)
 }
 
+.icon-energy{
+    color:white;
+}
+
 .bg-heat {
     background-color: #E61818
 }
@@ -90,6 +98,10 @@ html, body {
 
 .text-heat {
     color: rgb(116, 14, 14)
+}
+
+.icon-heat {
+    color:gold
 }
 
 #generation {
@@ -171,6 +183,25 @@ html, body {
     margin: 5px
 } */
 
+
+
+
+
+
+@media only screen and (max-width: 768px) {
+    .production-bar button{
+        padding-left:5px;
+        padding-right:5px;
+        /* display:none; */
+    }
+    .production-bar .input-group{
+        width: 130px;
+    }
+    .production-bar .production {
+        width: 40px;
+    }
+}
+
 @media only screen and (max-width: 576px) {
     .resources {
         font-size: 220%;
@@ -187,31 +218,27 @@ html, body {
     }
 
     .production-icon{
-        width:40px;
-        height:40px;
-        padding:4px;
-        margin: 5px 0;
+        width:50px;
+        height:50px;
+        padding:8px;
+        margin: 0px 0;
     }
     .resource-icon{
-        width:32px;
-        height:32px;
-        padding: 3px 0;
+        width:34px;
+        height:34px;
+        padding: 5px 0;
     }
     .production-bar button{
-        padding-left:6px;
-        padding-right:6px;
-    }
-    .production-bar .input-group{
-        width:130px
-    }
-}
+        padding-left:8px;
+        padding-right:8px;
+        display:inline-block;
 
-@media only screen and (max-width: 768px) {
-    .production-bar button{
-        padding-left:6px;
-        padding-right:6px;
     }
     .production-bar .input-group{
-        width:130px
+        width:150px
+    }
+    .production-bar .production {
+        width: 50px;
+        padding: 5px 0;
     }
 }
