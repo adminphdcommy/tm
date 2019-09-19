@@ -25,7 +25,7 @@
 				<div class="input-group-prepend">
 					<span class="input-group-text">Gen</span>
 				</div>
-				<input class="form-control px-2" type="text" id="generation" value=1 style="width: 45px;">
+				<input class="form-control px-2" type="number" id="generation" value=1 style="width: 40px;padding-left:2px;padding-right:2px;" disabled>
 				<div class="input-group-append">
 					<button class="btn btn-success" type="button" onclick="nextGen()">></button>
 				</div>
@@ -40,11 +40,14 @@
 		<form>
 			<div class="input-group">
 				<div class="input-group-prepend">
-					<span class="input-group-text px-2" id="basic-addon1">TR</span>
+					<button class="btn btn-danger" type="button" onclick="minusTR()">-</button>
 				</div>
 				<input type="text" class="form-control px-2" placeholder="TR" aria-label="Username"
-					aria-describedby="basic-addon1" style="width:40px" value="20" id="terraRating"
-					oninput="changeTR(this.value)">
+					aria-describedby="basic-addon1" style="width:35px" value="20" id="terraRating"
+					disabled>
+				<div class="input-group-append">
+					<button class="btn btn-success" type="button" onclick="addTR()">+</button>
+				</div>
 			</div>
 		</form>
 		<div class="dropdown">
@@ -372,6 +375,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
+					
 					<h5 class="modal-title" id="historyModalLabel">Historical Log</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -382,7 +386,8 @@
 
 					</div>
 				</div>
-				<div class="modal-footer text-center">
+				<div class="modal-footer text-center d-flex justify-content-between">
+						<button class="btn btn-danger" onclick="resetGame()" type="button">Reset Game</button>
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				</div>
 			</div>
@@ -401,7 +406,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body px-3" style="max-height: 90vh;">
+				<div class="modal-body px-3">
 					<input type="hidden" id="calculatorResource">
 					<div class="row">
 						<div class="col-sm-5 text-center">
@@ -418,12 +423,13 @@
 								<button class="btn btn-outline-dark num" type="button" data-num="1">1</button>
 								<button class="btn btn-outline-dark num" type="button" data-num="2">2</button>
 								<button class="btn btn-outline-dark num" type="button" data-num="3">3</button>
-								<button class="btn btn-outline-dark num" type="button" data-num="0">0</button>
 								<button class="btn btn-outline-danger num submit" data-action="minus" type="button"><i
 										class="fas fa-minus fa-sm"></i></button>
-								<button class="btn btn-outline-success num submit" data-action="plus" type="button"><i
+										<button class="btn btn-outline-dark num" type="button" data-num="0">0</button>
+										<button class="btn btn-outline-success num submit" data-action="plus" type="button"><i
 										class="fas fa-plus fa-sm"></i></button>
-								<button class="btn btn-outline-warning num clear" data-action="plus" type="button">C</button>
+								<button class="btn btn-outline-warning num clear" data-action="plus"
+									type="button">C</button>
 							</div>
 						</div>
 					</div>

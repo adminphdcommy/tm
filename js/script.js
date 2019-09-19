@@ -1,3 +1,4 @@
+
 let setting = {
   touch: {
     x: null,
@@ -7,8 +8,16 @@ let setting = {
     swipe: null
   },
   calculator: {
-    num: "",
+    num: "0",
     resource: null
+  },
+  icon: {
+    gold: "<i class='fas fa-euro-sign'></i>",
+    steel: "<i class='fas fa-industry'></i>",
+    titanium: "<i class='far fa-star'></i>",
+    plant: "<i class='fas fa-leaf'></i>",
+    energy: "<i class='fas fa-bolt'></i>",
+    heat: "<i class='fas fa-bolt fa-xs'></i><i class='fas fa-bolt fa-xs'></i><i class='fas fa-bolt fa-xs'></i>"
   }
 }
 
@@ -34,6 +43,13 @@ let game = {
 }
 
 let historyLog = []
+
+initialize()
+
+function initialize() {
+  loadFromLocal()
+}
+
 
 function plus(resourceType, value, section, options) {
   let opts = Object.assign({}, options)
@@ -114,28 +130,34 @@ function transferEnergy() {
 function populateHistory() {
   $("#history").html("")
   for (var i = historyLog.length - 1; i >= 0; i--) {
+    let actionType = historyLog[i]["action"] == "plus" ? "+" : " - "
     if (historyLog[i]["type"] == "generation") {
-      $("#history").append("<div class='col'><h5 class='text-center my-3'>Generation " + historyLog[i]["value"] + "</h5></div>")
+      $("#history").append("<div class='col'><h5 class='text-center my-3'>Generation " + actionType + historyLog[i]["value"] + "</h5></div>")
     }
     else if (historyLog[i]["type"] == "transferEnergy") {
-      $("#history").append("<div class='row'><div class='col-10 my-1'><span class='desc-tag bg-energy p-1'>Energy</span> --> <span class='desc-tag bg-heat'>Heat</span></div><div class='col-2'> " + historyLog[i]["value"] + "</div></div>")
+      $("#history").append("<div class='row'><div class='col-10 my-1'><span class='desc-tag bg-energy p-1'>Energy</span> --> <span class='desc-tag bg-heat p-1'>Heat</span></div><div class='col-2'> " + historyLog[i]["value"] + "</div></div>")
+    }
+    else if (historyLog[i]["type"] == "TR") {
+      $("#history").append("<div class='row'><div class='col-10 my-1'>Terraforming Rating</div><div class='col-2'> " + actionType + historyLog[i]["value"] + "</div></div>")
     }
     else {
-      let _class
+      let _class = "<div class='resource-icon bg-" + historyLog[i]["resource"] + " icon-" + historyLog[i]["resource"] + "'>" + setting.icon[historyLog[i]["resource"]] + "</div>"
       if (historyLog[i]["type"] == "production") {
-        _class = "text-" + historyLog[i]["resource"]
+        // _class = "text-" + historyLog[i]["resource"]
+        _class = "<div class='production-icon xs'>" + _class + "</div>"
       }
-      else if (historyLog[i]["type"] == "resources") {
-        _class = "icon-" + historyLog[i]["resource"] + " bg-" + historyLog[i]["resource"]
-      }
+      // else if (historyLog[i]["type"] == "resources") {
+      //   _class = "icon-" + historyLog[i]["resource"] + " bg-" + historyLog[i]["resource"]
+      // }
 
 
-      let str = "<div class='row logrow'><div class='col-10 my-1'>" + " <span class='desc-tag p-1 " + _class + "'>" + historyLog[i]["resource"] + "</span></div><div class='col-2 " + historyLog[i]["action"] + "'>" + historyLog[i]["value"] + "</div></div>"
+      let str = "<div class='row logrow'><div class='col-10 my-1'>" + _class + "</div><div class='col-2 " + historyLog[i]["action"] + "'>" + actionType + historyLog[i]["value"] + "</div></div>"
       // str = str + historyLog[i]["resource"] + " " + historyLog[i]["type"] + " " + historyLog[i]["action"] + " " + historyLog[i]["value"]
       $("#history").append(str)
     }
-
   }
+
+  saveToLocal()
 }
 
 function nextGen() {
@@ -155,9 +177,65 @@ function nextGen() {
   populateHistory()
 }
 
+function addTR() {
+  console.log("addTR")
+  let tr = parseInt($("#terraRating").val()) + 1
+  console.log(tr)
+  $("#terraRating").val(tr)
+  game["terraRating"] = tr
+  historyLog.push({ type: "TR", action: "plus", resource: "terraRating", value: 1, gen: game["generation"] })
+  populateHistory()
+
+}
+
+function minusTR() {
+  let tr = parseInt($("#terraRating").val()) - 1
+  $("#terraRating").val(tr)
+  game["terraRating"] = tr
+  historyLog.push({ type: "TR", action: "minus", resource: "terraRating", value: 1, gen: game["generation"] })
+  populateHistory()
+
+
+}
+
 function changeTR(tr) {
   tr = parseInt(tr)
   terraRating = tr
+}
+
+function resetGame() {
+  game = {
+    resources: {
+      gold: 0,
+      steel: 0,
+      titanium: 0,
+      plant: 0,
+      energy: 0,
+      heat: 0
+    },
+    production: {
+      gold: 0,
+      steel: 0,
+      titanium: 0,
+      plant: 0,
+      energy: 0,
+      heat: 0
+    },
+    generation: 1,
+    terraRating: 20
+  }
+
+  historyLog = []
+
+  populateHistory()
+  $("#generation").val("1")
+  $("#terraRating").val("20")
+  let _resources = Object.keys(game["resources"])
+  for (var i = 0; i < _resources.length; i++) {
+    $(".resources." + _resources[i]).html("0")
+    $(".production." + _resources[i]).html("0")
+  }
+
 }
 
 function handleTouchStart(e) {
@@ -238,6 +316,9 @@ function openCalculator(resource) {
 
 $("#calculatorModal .num").on("click", function (e) {
   if (e.target.dataset.num) {
+    if (setting.calculator.num == "0") {
+      setting.calculator.num = ""
+    }
     setting.calculator.num += e.target.dataset.num
   }
   console.log(setting.calculator.num)
@@ -257,14 +338,54 @@ $("#calculatorModal .submit").on("click", function (e) {
   console.log(action, num, resourceType)
 
   $("#calculatorModal").modal("hide")
-  setting.calculator.num = ""
+  setting.calculator.num = 0
   $(".displayNum").html("0")
 
 
 })
 
 $("#calculatorModal .clear").on("click", function (e) {
-  setting.calculator.num = ""
+  setting.calculator.num = 0
   $(".displayNum").html("0")
   console.log("clear", setting.calculator.num)
 })
+
+function saveToLocal() {
+  if (typeof (Storage) !== "undefined") {
+    localStorage["game"] = JSON.stringify(game)
+    localStorage["historyLog"] = JSON.stringify(historyLog)
+  } else {
+    console.log("local storagenot supported")
+  }
+}
+
+function loadFromLocal() {
+  if (typeof (Storage) !== "undefined") {
+    let loadedGame = localStorage["game"]
+    if (loadedGame) {
+      loadedGame = JSON.parse(localStorage["game"])
+      let resources = Object.keys(game["resources"])
+      for (var i = 0; i < resources.length; i++) {
+        game["resources"][resources[i]] = loadedGame["resources"][resources[i]]
+        $(".resources." + resources[i]).html(loadedGame["resources"][resources[i]])
+        game["production"][resources[i]] = loadedGame["production"][resources[i]]
+        $(".production." + resources[i]).html(loadedGame["production"][resources[i]])
+      }
+
+      game.generation = loadedGame["generation"]
+      $("#generation").val(loadedGame["generation"])
+
+      game.generation = loadedGame["terraRating"]
+      $("#terraRating").val(loadedGame["terraRating"]) 
+    }
+
+    let loadedHistoryLog = localStorage["historyLog"]
+    if(loadedHistoryLog){
+      loadedHistoryLog = JSON.parse(localStorage["historyLog"])
+      historyLog = loadedHistoryLog
+    }
+
+  } else {
+    console.log("local storage not supported")
+  }
+}
