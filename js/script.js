@@ -42,7 +42,57 @@ let game = {
   terraRating: 20
 }
 
+/**
+ * @typedef historyLogModel
+ * @property {'production'|'TR'|'transferEnergy'|'generation'|'resources'} type
+ * @property {'plus'|'minus'|'transferEnergy'} action
+ * @property {'gold'|'steel'|'titanium'|'plant'|'energy'|'heat'|'terraRating'} resource
+ * @property {Number} value
+ * @property {Number} gen
+ */
+/**
+ * @typedef historyLogGenerationModel
+ * @property {'generation'} type
+ * @property {Number} value
+ */
+/**
+ * @typedef historyLogTransferEnergyModel
+ * @property {'transferEnergy'} type
+ * @property {'transferEnergy'} action
+ * @property {'energy'} resource
+ * @property {Number} value
+ * @property {Number} gen
+ */
+/**
+ * @typedef historyLogTrModel
+ * @property {'TR'} type
+ * @property {'plus'|'minus'} action
+ * @property {'terraRating'} resource
+ * @property {Number} value
+ * @property {Number} gen
+ */
+/**
+ * @typedef historyLogProductionModel
+ * @property {'production'} type
+ * @property {'plus'|'minus'} action
+ * @property {'gold'|'steel'|'titanium'|'plant'|'energy'|'heat'} resource
+ * @property {Number} value
+ * @property {Number} gen
+ */
+/**
+ * @typedef historyLogResourcesModel
+ * @property {'resources'} type
+ * @property {'plus'|'minus'} action
+ * @property {'gold'|'steel'|'titanium'|'plant'|'energy'|'heat'} resource
+ * @property {Number} value
+ * @property {Number} gen
+ */
+
+/**
+ * @type {[historyLogProductionModel,historyLogTrModel,historyLogTransferEnergyModel,historyLogGenerationModel,historyLogResourcesModel]}
+ */
 let historyLog = []
+let undoTrack = []
 
 initialize()
 
@@ -53,34 +103,34 @@ function initialize() {
 
 function plus(resourceType, value, section, options) {
   let opts = Object.assign({}, options)
+  let clearUndoTrack = opts.clearUndoTrack == false ? false : true
   if (section == 'resources' || section == 'production') {
     game[section][resourceType] += value
-    $("." + section + "." + resourceType).html(game[section][resourceType])
+    // $("." + section + "." + resourceType).html(game[section][resourceType])
 
-    if (opts["noLog"]) {
-      return false
-    }
-    historyLog.push({ type: section, action: "plus", resource: resourceType, value: value, gen: game["generation"] })
+
   }
   else if (section == "terraRating") {
     game[section] += value
   }
 
+
+  if (opts["noLog"] !== true) {
+    historyLog.push({ type: section, action: "plus", resource: resourceType, value: value, gen: game["generation"] })
+  }
   populateHistory()
+  renderGameState(clearUndoTrack)
 
 }
 
 function minus(resourceType, value, section, options) {
+  console.log(options)
   let opts = Object.assign({}, options)
+  let clearUndoTrack = opts.clearUndoTrack == false ? false : true
   if (section == 'resources') {
     if (game[section][resourceType] >= value || value == 0) {
       game[section][resourceType] -= value
-      $(".resources." + resourceType).html(game[section][resourceType])
-
-      if (opts["noLog"]) {
-        return false
-      }
-      historyLog.push({ type: section, action: "minus", resource: resourceType, value: value, gen: game["generation"] })
+      // $(".resources." + resourceType).html(game[section][resourceType])
 
     }
     else {
@@ -90,23 +140,12 @@ function minus(resourceType, value, section, options) {
   else if (section == 'production') {
     if (game[section][resourceType] > 0) {
       game[section][resourceType] -= value
-      $(".production." + resourceType).html(game[section][resourceType])
-
-      if (opts["noLog"]) {
-        return false
-      }
-      historyLog.push({ type: "production", action: "minus", resource: resourceType, value: value, gen: game["generation"] })
-
+      // $(".production." + resourceType).html(game[section][resourceType])
 
     }
     else if (game[section][resourceType] <= 0 && resourceType == "gold" && game[section][resourceType] > -5) {
       game[section][resourceType]--
-      $(".production." + resourceType).html(game[section][resourceType])
-
-      if (opts["noLog"]) {
-        return false
-      }
-      historyLog.push({ type: "production", action: "minus", resource: resourceType, value: value, gen: game["generation"] })
+      // $(".production." + resourceType).html(game[section][resourceType])
 
     }
     else {
@@ -115,8 +154,13 @@ function minus(resourceType, value, section, options) {
     }
   }
 
-  populateHistory()
 
+  if (opts["noLog"] !== true) {
+    historyLog.push({ type: section, action: "minus", resource: resourceType, value: value, gen: game["generation"] })
+  }
+
+  populateHistory()
+  renderGameState(clearUndoTrack)
 
 }
 
@@ -125,6 +169,7 @@ function transferEnergy() {
   plus("heat", num, "resources", { noLog: true })
   minus("energy", num, "resources", { noLog: true })
   historyLog.push({ type: "transferEnergy", action: "transferEnergy", resource: "energy", value: num, gen: game["generation"] })
+
 }
 
 function populateHistory() {
@@ -132,27 +177,55 @@ function populateHistory() {
   for (var i = historyLog.length - 1; i >= 0; i--) {
     let actionType = historyLog[i]["action"] == "plus" ? "+" : " - "
     if (historyLog[i]["type"] == "generation") {
-      $("#history").append("<div class='col'><h5 class='text-center my-3'>Generation " + actionType + historyLog[i]["value"] + "</h5></div>")
+      $("#history").append(`
+      <div class='col px-0 py-1'>
+        <h5 class='text-center my-3 bg-light py-1'>Generation  ${actionType}  ${historyLog[i]["value"]} </h5>
+      </div>`)
     }
     else if (historyLog[i]["type"] == "transferEnergy") {
-      $("#history").append("<div class='row'><div class='col-10 my-1'><span class='desc-tag bg-energy p-1'>Energy</span> --> <span class='desc-tag bg-heat p-1'>Heat</span></div><div class='col-2'> " + historyLog[i]["value"] + "</div></div>")
+      $("#history").append(`
+      <div class='row'>
+        <div class='col-10 my-1'>
+          <span class='desc-tag resource-icon bg-energy p-1 icon-energy' style="vertical-align:top;">
+          ${setting.icon.energy}
+          </span> 
+          <div style="position:relative;display:inline-block;vertical-align:top;width:40px;height:34px;">
+            <div class="arrow">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <span class='desc-tag resource-icon bg-heat p-1 icon-heat' style="vertical-align:top;">
+            ${setting.icon.heat}
+          </span>
+        </div>
+      <div class='col-2 text-right py-2'>  ${historyLog[i]["value"]}</div>
+    </div>`)
     }
     else if (historyLog[i]["type"] == "TR") {
-      $("#history").append("<div class='row'><div class='col-10 my-1'>Terraforming Rating</div><div class='col-2'> " + actionType + historyLog[i]["value"] + "</div></div>")
+      $("#history").append(`
+      <div class='row'>
+        <div class='col-10 my-1 py-2'>Terraforming Rating</div>
+        <div class='col-2 text-right py-2'> ${actionType} ${historyLog[i]["value"]}</div>
+      </div>`)
     }
     else {
-      let _class = "<div class='resource-icon bg-" + historyLog[i]["resource"] + " icon-" + historyLog[i]["resource"] + "'>" + setting.icon[historyLog[i]["resource"]] + "</div>"
+      let _class = `<div class='resource-icon bg-${historyLog[i]["resource"]}  icon-${historyLog[i]["resource"]}'>${setting.icon[historyLog[i]["resource"]]}</div>`
       if (historyLog[i]["type"] == "production") {
         // _class = "text-" + historyLog[i]["resource"]
-        _class = "<div class='production-icon xs'>" + _class + "</div>"
+        _class = `<div class='production-icon xs'> ${_class} </div>`
       }
       // else if (historyLog[i]["type"] == "resources") {
       //   _class = "icon-" + historyLog[i]["resource"] + " bg-" + historyLog[i]["resource"]
       // }
 
 
-      let str = "<div class='row logrow'><div class='col-10 my-1'>" + _class + "</div><div class='col-2 " + historyLog[i]["action"] + "'>" + actionType + historyLog[i]["value"] + "</div></div>"
-      // str = str + historyLog[i]["resource"] + " " + historyLog[i]["type"] + " " + historyLog[i]["action"] + " " + historyLog[i]["value"]
+      let str = `
+      <div class='row logrow'>
+        <div class='col-10 my-1'> ${_class} </div>
+        <div class='col-2  ${historyLog[i]["action"]} text-right py-2'> ${actionType} ${historyLog[i]["value"]} </div>
+      </div>`
       $("#history").append(str)
     }
   }
@@ -162,7 +235,7 @@ function populateHistory() {
 
 function nextGen() {
   game["generation"]++
-  $("#generation").val(game["generation"])
+  // $("#generation").val(game["generation"])
 
   transferEnergy()
 
@@ -175,27 +248,148 @@ function nextGen() {
   plus("heat", game["production"]["heat"], "resources", { noLog: true })
   historyLog.push({ type: "generation", value: game["generation"] - 1 })
   populateHistory()
+
 }
 
-function addTR() {
+function addTR(options) {
   console.log("addTR")
+  let opt = Object.assign({}, options)
+  let clearUndoTrack = opt.clearUndoTrack == false ? false : true
   let tr = parseInt($("#terraRating").val()) + 1
   console.log(tr)
-  $("#terraRating").val(tr)
   game["terraRating"] = tr
-  historyLog.push({ type: "TR", action: "plus", resource: "terraRating", value: 1, gen: game["generation"] })
-  populateHistory()
+  if (opt && opt.noLog !== true) {
+    historyLog.push({ type: "TR", action: "plus", resource: "terraRating", value: 1, gen: game["generation"] })
+    populateHistory()
+  }
+
+  renderGameState(clearUndoTrack)
+}
+
+function minusTR(options) {
+  let tr = parseInt($("#terraRating").val()) - 1
+  let opt = Object.assign({}, options)
+  let clearUndoTrack = opt.clearUndoTrack == false ? false : true
+
+  game["terraRating"] = tr
+  if (opt && opt.noLog !== true) {
+    historyLog.push({ type: "TR", action: "minus", resource: "terraRating", value: 1, gen: game["generation"] })
+    populateHistory()
+  }
+  renderGameState(clearUndoTrack)
 
 }
 
-function minusTR() {
-  let tr = parseInt($("#terraRating").val()) - 1
-  $("#terraRating").val(tr)
-  game["terraRating"] = tr
-  historyLog.push({ type: "TR", action: "minus", resource: "terraRating", value: 1, gen: game["generation"] })
+function undo() {
+  let lastAction = historyLog.pop()
+  if (!lastAction) {
+    return
+  }
+  undoTrack.push(lastAction)
+  if (lastAction.type == "generation") {
+    let resources = Object.keys(game.resources)
+    resources.forEach(e => {
+      game.resources[e] = game.resources[e] - game.production[e]
+    })
+    game.generation--
+    game.resources.gold = game.resources.gold - game.terraRating
+    undo()
+  } else if (lastAction.type == "production" || lastAction.type == "resources") {
+    if (lastAction.action == "plus") {
+      minus(lastAction.resource, lastAction.value, lastAction.type, { noLog: true, clearUndoTrack: false })
+    } else {
+      plus(lastAction.resource, lastAction.value, lastAction.type, { noLog: true, clearUndoTrack: false })
+    }
+  } else if (lastAction.type == "TR") {
+    if (lastAction.action == "plus") {
+      minusTR({ noLog: true, clearUndoTrack: false })
+    } else {
+      addTR({ noLog: true, clearUndoTrack: false })
+    }
+  } else if (lastAction.type == "transferEnergy") {
+    game.resources.heat = game.resources.heat - lastAction.value
+    game.resources.energy = lastAction.value
+  } else {
+
+  }
+
+
   populateHistory()
+  renderGameState(false)
+}
+
+function redo() {
+  let lastAction = undoTrack.pop()
+  if (!lastAction) {
+    return
+  }
+  historyLog.push(lastAction)
+  if (lastAction.type == "generation") {
+    let resources = Object.keys(game.resources)
+    resources.forEach(e => {
+      game.resources[e] = game.resources[e] + game.production[e]
+    })
+    game.generation++
+    game.resources.gold = game.resources.gold + game.terraRating
+  } else if (lastAction.type == "production" || lastAction.type == "resources") {
+    if (lastAction.action == "plus") {
+      plus(lastAction.resource, lastAction.value, lastAction.type, { noLog: true, clearUndoTrack: false })
+    } else {
+      minus(lastAction.resource, lastAction.value, lastAction.type, { noLog: true, clearUndoTrack: false })
+    }
+  } else if (lastAction.type == "TR") {
+    if (lastAction.action == "plus") {
+      addTR({ noLog: true, clearUndoTrack: false })
+    } else {
+      minusTR({ noLog: true, clearUndoTrack: false })
+    }
+  } else if (lastAction.type == "transferEnergy") {
+    game.resources.heat = game.resources.heat + lastAction.value
+    game.resources.energy = lastAction.value
+    redo()
+  } else {
+
+  }
 
 
+  populateHistory()
+  renderGameState(false)
+}
+
+function renderGameState(clearUndoTrack) {
+  console.log("rendering game state")
+  $("#terraRating").val(game["terraRating"])
+  let productions = Object.keys(game.production)
+  let resources = Object.keys(game.resources)
+  productions.forEach(e => {
+    $(".production." + e).html(game.production[e])
+  })
+  resources.forEach(e => {
+    $(".resources." + e).html(game.resources[e])
+  })
+  $("#generation").val(game["generation"])
+
+  if (clearUndoTrack === true) {
+    undoTrack = []
+  }
+  if (undoTrack.length == 0) {
+    $("#redoBtn").prop("disabled", true)
+    $("#redoBtn").addClass("btn-outline-warning")
+    $("#redoBtn").removeClass("btn-warning")
+  } else {
+    $("#redoBtn").prop("disabled", false)
+    $("#redoBtn").addClass("btn-warning")
+    $("#redoBtn").removeClass("btn-outline-warning")
+  }
+  if (historyLog.length == 0) {
+    $("#undoBtn").prop("disabled", true)
+    $("#undoBtn").addClass("btn-outline-warning")
+    $("#undoBtn").removeClass("btn-warning")
+  } else {
+    $("#undoBtn").prop("disabled", false)
+    $("#undoBtn").addClass("btn-warning")
+    $("#undoBtn").removeClass("btn-outline-warning")
+  }
 }
 
 function changeTR(tr) {
@@ -228,13 +422,14 @@ function resetGame() {
   historyLog = []
 
   populateHistory()
-  $("#generation").val("1")
-  $("#terraRating").val("20")
-  let _resources = Object.keys(game["resources"])
-  for (var i = 0; i < _resources.length; i++) {
-    $(".resources." + _resources[i]).html("0")
-    $(".production." + _resources[i]).html("0")
-  }
+  renderGameState(true)
+  // $("#generation").val("1")
+  // $("#terraRating").val("20")
+  // let _resources = Object.keys(game["resources"])
+  // for (var i = 0; i < _resources.length; i++) {
+  //   $(".resources." + _resources[i]).html("0")
+  //   $(".production." + _resources[i]).html("0")
+  // }
 
 }
 
@@ -367,24 +562,25 @@ function loadFromLocal() {
       let resources = Object.keys(game["resources"])
       for (var i = 0; i < resources.length; i++) {
         game["resources"][resources[i]] = loadedGame["resources"][resources[i]]
-        $(".resources." + resources[i]).html(loadedGame["resources"][resources[i]])
+        // $(".resources." + resources[i]).html(loadedGame["resources"][resources[i]])
         game["production"][resources[i]] = loadedGame["production"][resources[i]]
-        $(".production." + resources[i]).html(loadedGame["production"][resources[i]])
+        // $(".production." + resources[i]).html(loadedGame["production"][resources[i]])
       }
 
       game.generation = loadedGame["generation"]
-      $("#generation").val(loadedGame["generation"])
+      // $("#generation").val(loadedGame["generation"])
 
-      game.generation = loadedGame["terraRating"]
-      $("#terraRating").val(loadedGame["terraRating"]) 
+      game.terraRating = loadedGame["terraRating"]
+      // $("#terraRating").val(loadedGame["terraRating"])
     }
 
     let loadedHistoryLog = localStorage["historyLog"]
-    if(loadedHistoryLog){
+    if (loadedHistoryLog) {
       loadedHistoryLog = JSON.parse(localStorage["historyLog"])
       historyLog = loadedHistoryLog
     }
-
+    renderGameState(false)
+    populateHistory()
   } else {
     console.log("local storage not supported")
   }
