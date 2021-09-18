@@ -178,13 +178,13 @@ function populateHistory() {
     let actionType = historyLog[i]["action"] == "plus" ? "+" : " - "
     if (historyLog[i]["type"] == "generation") {
       $("#history").append(`
-      <div class='col px-0 py-1'>
+      <div class='col px-0 py-1 logrow'>
         <h5 class='text-center my-3 bg-light py-1'>Generation  ${actionType}  ${historyLog[i]["value"]} </h5>
       </div>`)
     }
     else if (historyLog[i]["type"] == "transferEnergy") {
       $("#history").append(`
-      <div class='row'>
+      <div class='row logrow'>
         <div class='col-10 my-1'>
           <span class='desc-tag resource-icon bg-energy p-1 icon-energy' style="vertical-align:top;">
           ${setting.icon.energy}
@@ -205,7 +205,7 @@ function populateHistory() {
     }
     else if (historyLog[i]["type"] == "TR") {
       $("#history").append(`
-      <div class='row'>
+      <div class='row logrow'>
         <div class='col-10 my-1 py-2'>Terraforming Rating</div>
         <div class='col-2 text-right py-2'> ${actionType} ${historyLog[i]["value"]}</div>
       </div>`)
