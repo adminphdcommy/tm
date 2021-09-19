@@ -19,7 +19,7 @@
 
 <body>
 
-	<nav class="navbar navbar-light bg-light">
+	<nav class="navbar navbar-light bg-light" style="height:64px;">
 		<div style="flex-grow: 2">
 			<button type="button" class="btn btn-secondary" onclick="toggleNavbar()">
 				<i class="fas fa-sort"></i>
@@ -47,9 +47,9 @@
 						</div>
 						<div class="input-group">
 							<div class="input-group-prepend">
-								<button class="btn btn-danger" type="button" onclick="minusTR()" style="border-top-right-radius: 0;line-height: 1;">-</button>
+								<button class="btn btn-danger" type="button" onclick="minusTR()" style="border-top-left-radius: 0;line-height: 1;">-</button>
 							</div>
-							<div style="width:40px" id="terraRating" class="p-1">20</div>
+							<div style="width:40px;border-bottom-left-radius: 0" id="terraRating" class="p-1">20</div>
 							<div class="input-group-append">
 								<button class="btn btn-success" type="button" onclick="addTR()" style="border-top-right-radius: 0;line-height: 1;">+</button>
 							</div>
