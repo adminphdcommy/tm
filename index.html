@@ -20,40 +20,53 @@
 <body>
 
 	<nav class="navbar navbar-light bg-light">
-		<form>
-			<div class="input-group">
-				<div class="input-group-prepend">
-					<span class="input-group-text">Gen</span>
-				</div>
-				<input class="form-control px-2" type="number" id="generation" value=1
-					style="width: 40px;padding-left:2px;padding-right:2px;" disabled>
-				<div class="input-group-append">
-					<button class="btn btn-success" type="button" onclick="nextGen()">></button>
-				</div>
-			</div>
-		</form>
-
-		<!-- <form class="form-inline">
-			Generation
-			<span id="generation">1</span>
-			<button class="btn btn-outline-success" type="button" onclick="nextGen()">Next</button>
-		</form> -->
-		<form>
-			<div class="input-group">
-				<div class="input-group-prepend">
-					<button class="btn btn-danger" type="button" onclick="minusTR()">-</button>
-				</div>
-				<input type="text" class="form-control px-2" placeholder="TR" aria-label="Username"
-					aria-describedby="basic-addon1" style="width:35px" value="20" id="terraRating" disabled>
-				<div class="input-group-append">
-					<button class="btn btn-success" type="button" onclick="addTR()">+</button>
-				</div>
-			</div>
-		</form>
-		<div class="dropdown">
-			<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#historyModal">
-				History
+		<div style="flex-grow: 2">
+			<button type="button" class="btn btn-secondary" onclick="toggleNavbar()">
+				<i class="fas fa-sort"></i>
 			</button>
+		</div>
+		<div style="flex-grow: 8">
+			<div id="nav1"  class="nav-switch">
+				<div class="d-flex justify-content-between">
+					<div>
+						<div class="generation-text">
+							<span class="">Generation</span>
+						</div>
+						<div class="input-group">
+							
+							<div class="p-1 bg-light" id="generation" style="border-top-left-radius: 0;">1</div>
+							<div class="input-group-append">
+								<button class="btn btn-success" type="button" onclick="nextGen()" style="border-top-right-radius: 0;line-height: 1;">></button>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="generation-text">
+							<span class="">Terra Rating</span>
+						</div>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<button class="btn btn-danger" type="button" onclick="minusTR()" style="border-top-right-radius: 0;line-height: 1;">-</button>
+							</div>
+							<div style="width:40px" id="terraRating" class="p-1">20</div>
+							<div class="input-group-append">
+								<button class="btn btn-success" type="button" onclick="addTR()" style="border-top-right-radius: 0;line-height: 1;">+</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="nav2" style="height:0;" class="nav-switch">
+				<div class="d-flex">
+					<div class="dropdown">
+						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#historyModal" style="height:47px;width:106px">
+							History
+						</button>
+					</div>
+				</div>
+
+			</div>
 		</div>
 	</nav>
 	<div class="p-3">
@@ -389,8 +402,10 @@
 				<div class="modal-footer text-center d-flex justify-content-between">
 					<button class="btn btn-danger" onclick="resetGame()" type="button">Reset Game</button>
 					<div>
-						<button type="button" class="btn btn-outline-warning mx-1" onclick="undo()" id="undoBtn"><i class="fas fa-undo" ></i></button>
-						<button type="button" class="btn btn-outline-warning mx-1" onclick="redo()" id="redoBtn"><i class="fas fa-redo"></i></button>
+						<button type="button" class="btn btn-outline-warning mx-1" onclick="undo()" id="undoBtn"><i
+								class="fas fa-undo"></i></button>
+						<button type="button" class="btn btn-outline-warning mx-1" onclick="redo()" id="redoBtn"><i
+								class="fas fa-redo"></i></button>
 					</div>
 				</div>
 			</div>
@@ -452,10 +467,18 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-database.js"></script>
+	<script src="./js/firebase.js"></script>
 	<script src="./js/fontawesome.js"></script>
+    <script src="./js/util.js"></script>
 
 	<!-- Custom JS -->
 	<script src="js/script.js"></script>
+	<script src="js/analytics.js"></script>
+
 </body>
 
 </html>

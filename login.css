@@ -1,0 +1,23 @@
+html{
+    height:100%;
+}
+.login-wrapper{
+    position :absolute;
+    top:30%;
+    width: 100%;
+    left:0;
+}
+
+.login-wrapper .center{
+    max-width: 600px;
+    margin:0 auto;
+}
+
+#notReceiveEmail, #loginWithPassword, #loginWithLink{
+    color:#007bff;
+    text-decoration: underline;
+}
+
+#notReceiveEmail:hover, #loginWithPassword:hover, #loginWithLink:hover{
+    cursor: pointer;
+}

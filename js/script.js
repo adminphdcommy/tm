@@ -1,3 +1,13 @@
+firebase.auth().onAuthStateChanged(function (user) {
+  util.overlay(true).desc("Authenticating")
+  if (user) {
+      // util.overlay(true).desc("Authenticating")
+      util.overlay(false)
+
+  } else {
+    location.href = "/login?step=1"
+  }
+});
 
 let setting = {
   touch: {
@@ -255,7 +265,7 @@ function addTR(options) {
   console.log("addTR")
   let opt = Object.assign({}, options)
   let clearUndoTrack = opt.clearUndoTrack == false ? false : true
-  let tr = parseInt($("#terraRating").val()) + 1
+  let tr = parseInt($("#terraRating").html()) + 1
   console.log(tr)
   game["terraRating"] = tr
   if (opt && opt.noLog !== true) {
@@ -267,7 +277,7 @@ function addTR(options) {
 }
 
 function minusTR(options) {
-  let tr = parseInt($("#terraRating").val()) - 1
+  let tr = parseInt($("#terraRating").html()) - 1
   let opt = Object.assign({}, options)
   let clearUndoTrack = opt.clearUndoTrack == false ? false : true
 
@@ -358,7 +368,7 @@ function redo() {
 
 function renderGameState(clearUndoTrack) {
   console.log("rendering game state")
-  $("#terraRating").val(game["terraRating"])
+  $("#terraRating").html(game["terraRating"])
   let productions = Object.keys(game.production)
   let resources = Object.keys(game.resources)
   productions.forEach(e => {
@@ -367,7 +377,7 @@ function renderGameState(clearUndoTrack) {
   resources.forEach(e => {
     $(".resources." + e).html(game.resources[e])
   })
-  $("#generation").val(game["generation"])
+  $("#generation").html(game["generation"])
 
   if (clearUndoTrack === true) {
     undoTrack = []
@@ -544,6 +554,30 @@ $("#calculatorModal .clear").on("click", function (e) {
   $(".displayNum").html("0")
   console.log("clear", setting.calculator.num)
 })
+
+let currentNav = 'nav1'
+function toggleNavbar(){
+  if(currentNav == 'nav1'){
+    $("#nav1").animate({
+      "height":0,
+      "overflow-y":"hidden"
+    },200)
+    $("#nav2").animate({
+      "height":"48px",
+      "overflow-y":"hidden"
+    },200)
+    currentNav = "nav2"
+  }else{
+    $("#nav2").animate({
+      "height":0
+    },200)
+    $("#nav1").animate({
+      "height":"48px"
+    },200)
+    currentNav = 'nav1'
+  }
+}
+
 
 function saveToLocal() {
   if (typeof (Storage) !== "undefined") {
